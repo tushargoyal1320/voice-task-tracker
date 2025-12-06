@@ -10,6 +10,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"voice-task-tracker/middleware"
 	"voice-task-tracker/routes"
 )
@@ -25,10 +26,15 @@ func main() {
 	router.Use(middleware.CORSMiddleware)
 	router.Use(middleware.LoggingMiddleware)
 
+	port := os.Getenv("PORT")
+	if port == ""{
+		port = ":8080"
+	}
+
 	// Start the HTTP server on port 8080
 	// Server listens for incoming requests and routes them to appropriate handlers
-	log.Println("Starting server on :8080")
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	log.Println("Starting server on port:", port)
+	if err := http.ListenAndServe(port, router); err != nil {
 		log.Fatal(err) // Fatal will exit the program if server fails to start
 	}
 }
